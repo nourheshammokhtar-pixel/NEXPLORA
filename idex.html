@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#18143b">
+  <meta name="description" content="Explore, collect, and build a lunar outpost in a child-friendly 3D Moon adventure.">
+  <title>NEXPLORA: Lunar Outpost</title>
+  <link rel="stylesheet" href="main.css">
+  <script defer src="scene.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" data-action="home" aria-label="NEXPLORA home">
+      <span class="brand-mark">NX</span>
+      <span><b>NEXPLORA</b><small>LUNAR OUTPOST</small></span>
+    </a>
+    <div id="topStats" class="top-stats hidden" aria-live="polite">
+      <span id="dayLabel" class="day-pill">DAY 1 / 10</span>
+      <span class="top-stat">⚡ <b id="resourcePower">64%</b><i class="meter"><em id="powerMeter"></em></i></span>
+      <span class="top-stat">💚 <b id="resourceHealth">100%</b><i class="meter"><em id="healthMeter"></em></i></span>
+      <span class="top-stat">🥫 <b id="resourceFood">4</b></span>
+      <span class="top-stat">💧 <b id="resourceWater">4</b></span>
+      <span class="top-stat">🫧 <b id="resourceOxygen">4</b></span>
+      <span class="top-stat">🪨 <b id="resourceMaterials">2</b></span>
+      <span class="top-stat">🔬 <b id="resourceScience">0</b></span>
+    </div>
+    <div class="top-actions">
+      <span id="saveLabel" class="save-label">Progress saves on this device</span>
+      <button class="icon-button" type="button" data-action="guideHelp">👩‍🚀 ASK NOVA</button>
+      <button class="icon-button" type="button" data-action="science">NASA SCIENCE</button>
+      <button class="icon-button" type="button" data-action="pause">Ⅱ PAUSE</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="welcomeScreen" class="screen active" aria-labelledby="welcomeTitle">
+      <div class="welcome-layout">
+        <div class="welcome-copy">
+          <span class="eyebrow">JUNIOR ASTRONAUT MISSION TRAINER</span>
+          <h1 id="welcomeTitle">NEXPLORA:<br><span>LUNAR OUTPOST</span></h1>
+          <p>Walk on the Moon. Find supplies. Build a home for your crew.</p>
+          <div class="welcome-actions">
+            <button type="button" class="button primary" data-action="start">START ADVENTURE <span>→</span></button>
+            <button id="continueButton" type="button" class="button light hidden" data-action="continue">CONTINUE MISSION</button>
+            <button id="newGameButton" type="button" class="button ghost hidden" data-action="newGame">NEW GAME</button>
+          </div>
+          <div class="welcome-links">
+            <button type="button" data-action="how">HOW TO PLAY</button>
+            <button type="button" data-action="science">NASA SCIENCE CENTER</button>
+            <button type="button" data-action="passport">EXPLORER PASSPORT</button>
+          </div>
+          <p id="dataStatus" class="welcome-credit">Checking NASA space-weather data…</p>
+          <p class="welcome-credit">The cartoon world is game-made art. NASA facts and sources are shown separately.</p>
+        </div>
+        <div class="welcome-art" aria-hidden="true">
+          <div class="star star-one"></div><div class="star star-two"></div><div class="star star-three"></div>
+          <div class="earth"></div><div class="welcome-moon"><i></i><b></b><span></span></div>
+          <div class="hero-lander">🚀</div><div class="hero-astronaut">👩‍🚀</div>
+          <div class="orbit-ring"></div>
+        </div>
+        <aside class="welcome-nova"><span>👩‍🚀</span><div><b>Commander Nova</b><p>Hi, Explorer! Let’s build a Moon base together.</p></div></aside>
+      </div>
+    </section>
+
+    <section id="setupScreen" class="screen" aria-labelledby="setupTitle">
+      <div class="setup-shell">
+        <button class="text-button" type="button" data-action="home">← Home</button>
+        <span class="eyebrow">MISSION SETUP</span>
+        <h2 id="setupTitle">Choose your landing site</h2>
+        <p>Each site gives your crew a different game challenge. Site numbers are simplified, not a real forecast.</p>
+        <form id="setupForm">
+          <label class="name-field">Explorer name<input id="playerName" maxlength="20" required placeholder="Moon Explorer"></label>
+          <div class="site-grid">
+            <button type="button" class="site-choice selected" data-site="rim"><span>🌄</span><b>Shackleton Crater Rim</b><small>Terrain: rolling rim</small><p>More balanced sunlight and a nearby shadowed region to investigate.</p><em>GOOD BALANCE</em></button>
+            <button type="button" class="site-choice" data-site="floor"><span>❄️</span><b>Cabeus Crater Floor</b><small>Terrain: deep basin</small><p>A tougher power challenge. The game gives this site an extra ice-search token.</p><em>POWER CHALLENGE</em></button>
+            <button type="button" class="site-choice" data-site="ridge"><span>☀️</span><b>South Pole Ridge</b><small>Terrain: rocky high ground</small><p>More game sunlight, but fewer nearby ice-search rewards.</p><em>SUNLIGHT FOCUS</em></button>
+          </div>
+          <p id="selectedSiteDescription" class="selected-site-note">A balanced game challenge with sunlit high ground and nearby shadowed regions to explore.</p>
+          <aside class="setup-nova"><span>👩‍🚀</span><p><b>Commander Nova</b><br>Pick a name and a landing site. Each site changes the game’s sunlight and supply challenge.</p><button class="help-link" type="button" data-action="guideHelp">ASK NOVA FOR HELP</button></aside>
+          <button type="submit" class="button primary">CONFIRM LANDING <span>→</span></button>
+        </form>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" aria-label="3D lunar exploration mission">
+      <div class="mission-banner">
+        <div><span class="eyebrow" id="missionTag">Explorer</span><h2 id="missionSite">Shackleton Crater Rim</h2></div>
+        <div class="mission-actions">
+          <button type="button" class="button small light" data-action="map">🗺 MAP</button>
+          <button type="button" class="button small light" data-action="openEvent">⚠ SPACE WEATHER</button>
+        </div>
+      </div>
+
+      <div class="game-layout">
+        <section class="world-stage" aria-label="Lunar world">
+          <canvas id="worldCanvas" tabindex="0" aria-label="3D Moon. Use W A S D to walk. Drag to look around. Scroll to zoom."></canvas>
+          <div class="world-chips"><span>🌍 EARTH RISE</span><span id="siteName">Moon surface</span><span>DRAG TO ORBIT · SCROLL TO ZOOM</span></div>
+          <div id="worldError" class="world-error" role="alert"></div>
+          <div id="placementHint" class="placement-hint"></div>
+          <div id="nearbyCard" class="nearby-card" aria-live="polite"></div>
+          <div class="touch-controls" id="touchControls" aria-label="Touch movement controls">
+            <button type="button" data-move="KeyW" aria-label="Walk forward">▲</button>
+            <div><button type="button" data-move="KeyA" aria-label="Walk left">◀</button><button type="button" data-move="KeyS" aria-label="Walk backward">▼</button><button type="button" data-move="KeyD" aria-label="Walk right">▶</button></div>
+          </div>
+        </section>
+
+        <aside class="mission-sidebar">
+          <section class="objective-card">
+            <div class="objective-kicker"><span class="eyebrow">CURRENT OBJECTIVE</span><span id="dayLabelCopy">DAY 1 / 10</span></div>
+            <h3 id="objectiveTitle">Explore the landing area</h3>
+            <p id="objectiveText"></p>
+            <div class="progress-track"><i id="objectiveBar"></i></div>
+            <div class="objective-bottom"><span id="objectiveCount">0 / 4</span><button id="markBaseButton" class="mini-action" type="button" data-action="markBase">MARK BASE SPOT</button></div>
+            <button id="advanceDayButton" class="button primary full hidden" type="button" data-action="advanceDay">OBJECTIVE COMPLETE · NEXT DAY</button>
+          </section>
+          <section class="nova-card">
+            <div class="nova-avatar">👩‍🚀</div>
+            <div><b>Commander Nova</b><p id="novaMessage">Let’s explore! Use W, A, S, D to walk around the landing site.</p><button class="help-link" type="button" data-action="how">Need a hint?</button></div>
+          </section>
+          <section class="quick-resources">
+            <h3>Pack &amp; score</h3>
+            <div><span>🪨 Building materials</span><b id="packMaterials">2</b></div>
+            <div><span>🔧 Energy equipment</span><b id="packEquipment">2</b></div>
+            <div><span>🔬 Science samples</span><b id="packSamples">0</b></div>
+            <div><span>🔭 Science points</span><b id="packScience">0</b></div>
+          </section>
+          <p id="siteNote" class="site-note"></p>
+        </aside>
+      </div>
+
+      <nav class="tool-dock" aria-label="Mission tools">
+        <button type="button" data-action="inventory"><span>🎒</span>INVENTORY</button>
+        <button id="buildMenuButton" type="button" data-action="build"><span>🧱</span>BUILD</button>
+        <button type="button" data-action="rover"><span>🤖</span>ROVER</button>
+        <button type="button" data-action="missions"><span>🎯</span>MISSIONS</button>
+        <button type="button" data-action="science"><span>🔭</span>SCIENCE</button>
+      </nav>
+
+      <section id="inventoryPanel" class="side-panel" aria-label="Inventory">
+        <header><b>🎒 Mission inventory</b><button type="button" data-action="closePanels" aria-label="Close inventory">×</button></header>
+        <div id="inventoryGrid"></div>
+        <p>Visit a Storage Station to check and organize supplies.</p>
+      </section>
+      <section id="buildPanel" class="side-panel build-panel" aria-label="Build menu">
+        <header><b>🧱 Build your Moon base</b><button type="button" data-action="closePanels" aria-label="Close build menu">×</button></header>
+        <p>Choose a structure. Then click a clear spot inside your marked base zone.</p>
+        <div id="buildItems" class="build-grid"></div>
+      </section>
+      <section id="missionPanel" class="side-panel" aria-label="Mission tasks">
+        <header><b>🎯 Ten-day mission</b><button type="button" data-action="closePanels" aria-label="Close missions">×</button></header>
+        <ol class="mission-list">
+          <li>Explore and collect supplies</li><li>Build a lunar habitat</li><li>Set up solar power</li><li>Start life support</li><li>Organize supplies</li><li>Protect the crew</li><li>Explore with a rover</li><li>Study a Moon sample</li><li>Respond to a space-weather alert</li><li>Complete your outpost</li>
+        </ol>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="appDialog" class="app-dialog">
+    <button id="dialogClose" class="dialog-close" type="button" aria-label="Close dialog">×</button>
+    <span class="eyebrow">MISSION CONTROL</span>
+    <h2 id="dialogTitle">Explorer guide</h2>
+    <div id="dialogBody" class="dialog-body"></div>
+    <div id="dialogActions" class="dialog-actions"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.site-choice').forEach(card => {
+        card.setAttribute('aria-pressed', card.classList.contains('selected') ? 'true' : 'false');
+      });
+    });
+  </script>
+</body>
+</html>
